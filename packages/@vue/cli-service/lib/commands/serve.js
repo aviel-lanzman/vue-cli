@@ -6,6 +6,8 @@ const {
   IpcMessenger
 } = require('@vue/cli-shared-utils')
 
+var QRCode = require('qrcode')
+
 const defaults = {
   host: '0.0.0.0',
   port: 8080,
@@ -288,6 +290,13 @@ module.exports = (api, options) => {
         console.log(`  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`)
         if (!isInContainer) {
           console.log(`  - Network: ${chalk.cyan(networkUrl)}`)
+          QRCode.toDataURL(` ${chalk.cyan(networkUrl)}`)
+          .then(url => {
+            console.log(` - Network: ${url}`)
+          })
+          .catch(err => {
+            console.error(err)
+          })
         } else {
           console.log()
           console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
